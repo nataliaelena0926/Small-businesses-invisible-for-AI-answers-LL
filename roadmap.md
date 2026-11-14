@@ -1,0 +1,19 @@
+# Requested changes
+- [x] Simplify password requirements and verify a simple password can create an account.
+- [x] Set Basic to €19, Pro to €59, and Premium to €129; verify displayed and checkout prices.
+- [x] Enable signup without confirmation emails and verify immediate sign-in for a new account.
+- [x] Restore signed-in accounts on return and provide explicit sign out.
+- [x] Show a clearly labeled, fully completed Premium simulation after demo checkout.
+- [x] Test session restoration, checkout, simulation, and sign out.
+- [x] Add an interactive completed website demonstration.
+- [x] Add a fictional Maps profile with tabs and directions preview.
+- [x] Open sample AI search trends on click and verify all previews.
+- [x] Restore the previous Premium simulation version; cancel new Google authorization and manual AI feedback features.
+- [x] Add official Google Business onboarding with a clearly separate demo connection.
+- [x] Add Premium Smart Review Manager with sample Google-format reviews, editable GEO replies, and explicit posting approval.
+- [x] Verify demo connection, reply editing, approval, and mobile layout.
+- [ ] Activate and verify official Google consent, reads and posting; blocked on owner OAuth credentials and Google Business Profile API approval.
+- [x] Add Vizibil's My plan page (website builder, steps + QR, re-checks, review themes, marketing, site check, RO/EN) to Visibly.
+- [x] Refactor the pricing section: Pro as the visual hero with the only solid button, Premium secondary, Basic gaps shown as struck-through, trust line under the cards.
+- [x] Code-review update: EUR packages with Pro as the monthly hero (29 € / 19 €/mo / 35 €/mo), Readiness Score naming and honest claims, dashboard banner padding, re-weighted criteria, CUI + test-email validation, sample re-check history, MVP footer note.
+- [ ] Partial answers in the assessment and RO/EN across the whole app; not requested to change scoring yet.
