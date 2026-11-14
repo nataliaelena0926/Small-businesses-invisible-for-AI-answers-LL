@@ -1,0 +1,9 @@
+{
+  "reviews": [
+    {"reviewId":"demo-1","reviewer":{"displayName":"Alex · Sample customer","isAnonymous":false},"starRating":"FIVE","comment":"A welcoming team and excellent service. I'll happily visit again.","createTime":"2026-11-10T12:00:00Z","updateTime":"2026-11-10T12:00:00Z"},
+    {"reviewId":"demo-2","reviewer":{"displayName":"Sam · Sample customer","isAnonymous":false},"starRating":"THREE","comment":"Friendly staff, but the wait was longer than expected on Saturday.","createTime":"2026-11-09T14:30:00Z","updateTime":"2026-11-09T14:30:00Z"},
+    {"reviewId":"demo-3","reviewer":{"displayName":"Robin · Sample customer","isAnonymous":false},"starRating":"FOUR","comment":"Great local place and a helpful team.","createTime":"2026-11-08T09:00:00Z","updateTime":"2026-11-08T09:00:00Z","reviewReply":{"comment":"Thank you for your kind feedback. We appreciate your support!","updateTime":"2026-11-08T11:00:00Z"}}
+  ],
+  "averageRating":4,
+  "totalReviewCount":3
+}

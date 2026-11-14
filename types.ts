@@ -1,93 +1,256 @@
-export type Answer = "full" | "partial" | "none";
-export type PlanId = "start" | "maintain" | "reviews" | "complete";
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
-export interface AppUser {
-  id: string;
-  email: string;
-  aiOptIn: boolean;
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.18"
+  }
+  public: {
+    Tables: {
+      businesses: {
+        Row: {
+          answers: Json | null
+          created_at: string
+          id: string
+          industry: string
+          name: string
+          plan: string | null
+          score: number | null
+          tax_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json | null
+          created_at?: string
+          id?: string
+          industry: string
+          name: string
+          plan?: string | null
+          score?: number | null
+          tax_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json | null
+          created_at?: string
+          id?: string
+          industry?: string
+          name?: string
+          plan?: string | null
+          score?: number | null
+          tax_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      feedback_ai_state: {
+        Row: {
+          blocked_message: string | null
+          blocked_status: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blocked_message?: string | null
+          blocked_status?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blocked_message?: string | null
+          blocked_status?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      google_business_connections: {
+        Row: {
+          connected_at: string
+          refresh_token_ciphertext: string
+          user_id: string
+        }
+        Insert: {
+          connected_at?: string
+          refresh_token_ciphertext: string
+          user_id: string
+        }
+        Update: {
+          connected_at?: string
+          refresh_token_ciphertext?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      google_business_oauth_requests: {
+        Row: {
+          expires_at: string
+          redirect_uri: string
+          state_hash: string
+          user_id: string
+          verifier_ciphertext: string
+        }
+        Insert: {
+          expires_at: string
+          redirect_uri: string
+          state_hash: string
+          user_id: string
+          verifier_ciphertext: string
+        }
+        Update: {
+          expires_at?: string
+          redirect_uri?: string
+          state_hash?: string
+          user_id?: string
+          verifier_ciphertext?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      choose_plan: { Args: { _plan: string }; Returns: boolean }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
 }
 
-export interface Business {
-  name: string;
-  cui: string | null;
-  domain: string;
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
 }
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
 
-export interface Profile {
-  storeName: string;
-  address: string;
-  city: string;
-  phone: string;
-  features: Record<string, boolean>;
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
 }
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
 
-export type Assessment = Record<string, Answer>;
-
-export interface SiteCheck {
-  id: string;
-  pass: boolean;
-  detail?: string;
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
 }
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
 
-export interface SiteAudit {
-  url: string; // adresa finala, dupa redirecturi
-  fetchedAt: string;
-  ms: number;
-  title: string;
-  score: number; // 0-100
-  checks: SiteCheck[];
-  clientRendered?: boolean; // static fetch saw little text; shown as a notice, never a penalty
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never) = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
 }
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
 
-export interface DayHours {
-  open: string; // "09:00" sau "" daca nu e completat
-  close: string;
-  closed: boolean;
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never) = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
 }
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
 
-/** Informatiile suplimentare din care se genereaza site-ul. */
-export interface SiteInfo {
-  lang: "ro" | "en";
-  tagline: string;
-  description: string;
-  services: { name: string; price: string }[];
-  hours: Record<string, DayHours>;
-  email: string;
-  imageUrl: string;
-  publishUrl: string;
-  accent: string;
-  style: "light" | "warm" | "dark";
-}
-
-export interface ScorePoint {
-  at: string;
-  score: number;
-}
-
-export interface AppState {
-  business: Business | null;
-  profile: Profile | null;
-  assessment: Assessment | null;
-  plan: PlanId | null;
-  websiteUrl: string | null;
-  siteAudit: SiteAudit | null;
-  tasksDone: string[];
-  reviewLink: string | null;
-  siteInfo: SiteInfo | null;
-  siteHistory: ScorePoint[]; // scorul tehnic la fiecare reverificare
-  reviewsText: string; // recenziile introduse de proprietar, una pe linie
-}
-
-export const EMPTY_STATE: AppState = {
-  business: null,
-  profile: null,
-  assessment: null,
-  plan: null,
-  websiteUrl: null,
-  siteAudit: null,
-  tasksDone: [],
-  reviewLink: null,
-  siteInfo: null,
-  siteHistory: [],
-  reviewsText: "",
-};
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const
