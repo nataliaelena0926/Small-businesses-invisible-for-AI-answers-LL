@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1794671209859,
+      "tag": "0000_migration",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794675618919,
+      "tag": "0001_google_business_owner_oauth",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794675793020,
+      "tag": "0002_feedback_ai_access_state",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794676175302,
+      "tag": "0003_restrict_owner_oauth_and_ai_state",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794680837235,
+      "tag": "0004_lock_plan_column",
+      "breakpoints": true
+    }
+  ]
+}
